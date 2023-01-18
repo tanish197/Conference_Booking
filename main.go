@@ -12,9 +12,6 @@ func main() {
 
 	fmt.Print("*** Get your tickets here to attend the conference *** \n")
 
-	
-    
-    
     var bookings = []string{}
 	var firstName string
     var lastName string
@@ -42,12 +39,14 @@ func main() {
 	//**for appending the array when we dnt knw the size of array** i.e., dynamic list
 	bookings = append(bookings, firstName + " " + lastName) 
 	
-	fmt.Printf("The whole booking array: %v\n", bookings)
-    fmt.Printf("The first value booking array: %v \n", bookings[0])
-	fmt.Printf("Array type: %T \n", bookings)
-	fmt.Printf("Array length: %v \n", len(bookings))
+	// fmt.Printf("The whole booking array: %v\n", bookings)
+    // fmt.Printf("The first value booking array: %v \n", bookings[0])
+	// fmt.Printf("Array type: %T \n", bookings)
+	// fmt.Printf("Array length: %v \n", len(bookings))
+	// fmt.Printf("Slice type: %T \n", bookings)
+	// fmt.Printf("Slice length: %v \n", len(bookings)) 
 	
-	
+	fmt.Printf("These all are booking: %v\n", bookings)
 
     
 
