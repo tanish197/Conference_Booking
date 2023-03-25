@@ -3,6 +3,7 @@ package main //Golang is open source, mixture of C and python
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"strings"
 
@@ -18,53 +19,6 @@ var bookings = []string{}
 
 func main() {
 	greetUsers()
-
-	for {
-		firstName, lastName, email, userTicket := getUserInput()
-
-		isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, email, userTicket, remainingTickets)
-
-		if isValidName && isValidEmail && isValidTicketNumber {
-
-			bookTicket(remainingTickets, userTicket, &bookings, firstName, lastName, email, conferenceName)
-			// if userTicket > remainingTickets{
-			// 	fmt.Printf("We only have %v tickets available, so you can't book %v tickets\n ", remainingTickets, userTicket)
-			// 	break // loop will break here
-			// 	// continue  **This will not break and jump to next iteration in case user wants to correct number of tickets**
-			// }
-
-			// fmt.Printf("The whole booking array: %v\n", bookings)
-			// fmt.Printf("The first value booking array: %v \n", bookings[0])
-			// fmt.Printf("Array type: %T \n", bookings)
-			// fmt.Printf("Array length: %v \n", len(bookings))
-			// fmt.Printf("Slice type: %T \n", bookings)
-			// fmt.Printf("Slice length: %v \n", len(bookings))
-
-			// fmt.Printf("These all are booking: %v\n", bookings)
-
-			firstNames := getFirstName(bookings)
-			fmt.Printf("The first names of bookings are: %v\n", firstNames)
-
-			if remainingTickets == 0 {
-				fmt.Println("Our Conference is booked out. Come back next year")
-				break
-
-			}
-		} else {
-			if !isValidName {
-				fmt.Println("You entered wrong name, please check")
-
-			}
-			if !isValidEmail {
-				fmt.Println("You entered wrong mail id, please check")
-			}
-			if !isValidTicketNumber {
-				fmt.Println("You entered wrong Ticket Number, please check")
-			}
-
-			fmt.Println("Your input data is invalid, try again")
-		}
-	}
 
 	r := gin.Default()
 
@@ -83,11 +37,70 @@ func main() {
 			c.AbortWithError(http.StatusInternalServerError, err)
 			return
 		}
+
 	})
 
-	// Start the server
-	r.Run()
+	go func() {
+		if err := r.Run(":8080"); err != nil {
+			log.Fatalf("Failed to start server: %v", err)
+		}
+	}()
 
+	// // Start the server
+	// r.Run()
+
+	go func() {
+
+		for {
+			firstName, lastName, email, userTicket := getUserInput()
+
+			isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, email, userTicket, remainingTickets)
+
+			if isValidName && isValidEmail && isValidTicketNumber {
+
+				bookTicket(remainingTickets, userTicket, &bookings, firstName, lastName, email, conferenceName)
+				// if userTicket > remainingTickets{
+				// 	fmt.Printf("We only have %v tickets available, so you can't book %v tickets\n ", remainingTickets, userTicket)
+				// 	break // loop will break here
+				// 	// continue  **This will not break and jump to next iteration in case user wants to correct number of tickets**
+				// }
+
+				// fmt.Printf("The whole booking array: %v\n", bookings)
+				// fmt.Printf("The first value booking array: %v \n", bookings[0])
+				// fmt.Printf("Array type: %T \n", bookings)
+				// fmt.Printf("Array length: %v \n", len(bookings))
+				// fmt.Printf("Slice type: %T \n", bookings)
+				// fmt.Printf("Slice length: %v \n", len(bookings))
+
+				// fmt.Printf("These all are booking: %v\n", bookings)
+
+				firstNames := getFirstName(bookings)
+				fmt.Printf("The first names of bookings are: %v\n", firstNames)
+
+				if remainingTickets == 0 {
+					fmt.Println("Our Conference is booked out. Come back next year")
+					break
+
+				}
+			} else {
+				if !isValidName {
+					fmt.Println("You entered wrong name, please check")
+
+				}
+				if !isValidEmail {
+					fmt.Println("You entered wrong mail id, please check")
+				}
+				if !isValidTicketNumber {
+					fmt.Println("You entered wrong Ticket Number, please check")
+				}
+
+				fmt.Println("Your input data is invalid, try again")
+			}
+		}
+
+	}()
+
+	select {}
 }
 
 func greetUsers() {
