@@ -5,30 +5,30 @@
     <title>Go Conference Ticket Booking</title>
     <style>
 		body {
-			background-image: url("events.png");
+			background-color: #6FC3DF ;
 			font-family: Arial, sans-serif;
 			font-size: 16px;
 			margin: 0;
 			padding: 0;
 		}
-
+		
 		.container {
 			margin: 0 auto;
 			max-width: 800px;
 			padding: 20px;
 		}
-
+		
 		h1, h2 {
 			text-align: center;
 			color: white;
 		}
-
+		
 		form {
 			background-color: #ad7bdb;
 			border: 1px solid #23bdfa;
 			padding: 20px;
 		}
-
+		
 		input[type=text], input[type=email], input[type=number] {
 			display: block;
 			margin-bottom: 10px;
@@ -45,11 +45,11 @@
 			border-radius: 4px;
 			cursor: pointer;
 		}
-
+		
 		input[type="submit"]:hover {
 			background-color: #FF00FF;
 		}
-
+		
 		.button {
 			background-color: #04AA6D;
 			border: none;
@@ -61,16 +61,16 @@
 			font-size: 16px;
 			margin: 4px 2px;
 		}
-
+		
 		  .button1 {
 			border-radius: 12px;
 		}
 	</style>
   </head>
   <body>
-    <h1>Go Conference Ticket Booking</h1>
-    <p style="color:white">Number of tickets available: <span id="remaining-tickets">50</span></p>
-    <form id="booking-form">
+    <h1 style="color: black;">Go Conference Ticket Booking</h1>
+    <p style="color:black">Number of tickets available: <span id="remaining-tickets">50</span></p>
+    <form method="POST" action="/main.go" id="booking-form">
       <div>
         <label for="first-name"><b>First Name:</b></label>
         <input type="text" id="first-name" name="first-name" required>
@@ -90,6 +90,46 @@
       <button class="button button1" type="submit"><i>Book Tickets</i></button>
     </form>
     <div id="message"></div>
-    <script src="script.js"></script>
+    <script>
+		// Get elements from the DOM
+const bookingForm = document.getElementById('booking-form');
+const remainingTickets = document.getElementById('remaining-tickets');
+const message = document.getElementById('message');
+
+// Set the initial number of tickets available
+let ticketsAvailable = 50;
+
+// Add an event listener for the form submission
+bookingForm.addEventListener('submit', (event) => {
+  event.preventDefault(); // prevent form submission
+
+  // Get the form data
+  const formData = new FormData(event.target);
+
+  // Get the number of tickets requested
+  const numberOfTickets = parseInt(formData.get('ticket-number'));
+
+  // Check if there are enough tickets available
+  if (numberOfTickets <= ticketsAvailable) {
+    // Subtract the number of tickets requested from the available tickets
+    ticketsAvailable -= numberOfTickets;
+
+    // Update the remaining tickets count on the page
+    remainingTickets.textContent = ticketsAvailable;
+
+    // Display a success message
+    message.style.color = 'black';
+    message.textContent = `Tickets booked successfully for ${formData.get('first-name')} ${formData.get('last-name')}.`;
+
+    // Reset the form
+    bookingForm.reset();
+  } else {
+    // Display an error message
+    message.style.color = 'black';
+    message.textContent = `Sorry, only ${ticketsAvailable} tickets are available.`;
+  }
+});
+
+	</script>
   </body>
 </html>

@@ -2,7 +2,11 @@ package main //Golang is open source, mixture of C and python
 
 import (
 	"fmt"
+	"html/template"
+	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 var conferenceName = "Go Conference"
@@ -13,6 +17,28 @@ var remainingTickets uint = 50
 var bookings = []string{}
 
 func main() {
+
+	r := gin.Default()
+
+	// Route to render HTML page
+	r.GET("/", func(c *gin.Context) {
+		tmpl, err := template.ParseFiles("index.html")
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+		data := gin.H{
+			"Bookings": bookings,
+		}
+		err = tmpl.Execute(c.Writer, data)
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+	})
+
+	// Start the server
+	r.Run()
 
 	greetUsers()
 
