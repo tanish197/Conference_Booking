@@ -17,29 +17,6 @@ var remainingTickets uint = 50
 var bookings = []string{}
 
 func main() {
-
-	r := gin.Default()
-
-	// Route to render HTML page
-	r.GET("/", func(c *gin.Context) {
-		tmpl, err := template.ParseFiles("index.html")
-		if err != nil {
-			c.AbortWithError(http.StatusInternalServerError, err)
-			return
-		}
-		data := gin.H{
-			"Bookings": bookings,
-		}
-		err = tmpl.Execute(c.Writer, data)
-		if err != nil {
-			c.AbortWithError(http.StatusInternalServerError, err)
-			return
-		}
-	})
-
-	// Start the server
-	r.Run()
-
 	greetUsers()
 
 	for {
@@ -88,6 +65,28 @@ func main() {
 			fmt.Println("Your input data is invalid, try again")
 		}
 	}
+
+	r := gin.Default()
+
+	// Route to render HTML page
+	r.GET("/", func(c *gin.Context) {
+		tmpl, err := template.ParseFiles("index.html")
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+		data := gin.H{
+			"Bookings": bookings,
+		}
+		err = tmpl.Execute(c.Writer, data)
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+	})
+
+	// Start the server
+	r.Run()
 
 }
 
