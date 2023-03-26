@@ -69,7 +69,7 @@
   </head>
   <body>
     <h1 style="color: black;">Go Conference Ticket Booking</h1>
-    <p style="color:black">Number of tickets available: <span id="remaining-tickets">50</span></p>
+    <p style="color:black"><b>Number of tickets available: </b><span id="remaining-tickets"><b>50</b></span></p>
     <form method="POST" action="/main.go" id="booking-form">
       <div>
         <label for="first-name"><b>First Name:</b></label>
@@ -118,7 +118,8 @@ bookingForm.addEventListener('submit', (event) => {
     remainingTickets.textContent = ticketsAvailable;
 
     // Display a success message
-    message.style.color = 'black';
+    message.style.color = 'red';
+	message.style.fontWeight = 'bold';
     message.textContent = `Tickets booked successfully for ${formData.get('first-name')} ${formData.get('last-name')}.`;
 
     // Reset the form
@@ -126,6 +127,7 @@ bookingForm.addEventListener('submit', (event) => {
   } else {
     // Display an error message
     message.style.color = 'black';
+	message.style.fontWeight = 'bold';
     message.textContent = `Sorry, only ${ticketsAvailable} tickets are available.`;
   }
 });
